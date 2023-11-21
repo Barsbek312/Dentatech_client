@@ -1,0 +1,122 @@
+.auth__main {
+    min-height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: flex;
+}
+
+.auth__wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+}
+
+.position__wrapper{
+    margin-top: 10px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.form>div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+    position: relative;
+    width: 300px;
+}
+
+.form>div::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 33px;
+    z-index: 1;
+    height: 20px;
+    width: 21px;
+}
+
+.form>div.name__wrapper::before {
+    background: url("./../../../assets/images/login__images/name.svg") no-repeat;
+}
+
+.form>div.surname__wrapper::before {
+    background: url("./../../../assets/images/login__images/name.svg") no-repeat;
+}
+
+.form>div.email__wrapper::before {
+    background: url("./../../../assets/images/login__images/email.svg") no-repeat;
+    top: 35px;
+}
+
+.form>div.password__wrapper {
+    margin-bottom: 20px;
+}
+
+.form>div.password__wrapper::before {
+    background: url("./../../../assets/images/login__images/password.svg") no-repeat;
+}
+
+.form>div>label {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    color: #222;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.form>div>input {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(196, 196, 196, 0.50);
+    position: relative;
+    padding-left: 30px;
+}
+
+.button {
+    border-radius: 4px;
+    background: #3B82F6;
+    border: none;
+    outline: none;
+    color: #fff;
+    padding: 16px 0;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.button:hover {
+    -webkit-box-shadow: 0px 0px 15px 2px rgba(44, 82, 111, 0.36);
+    -moz-box-shadow: 0px 0px 15px 2px rgba(44, 82, 111, 0.36);
+    box-shadow: 0px 0px 15px 2px rgba(44, 82, 111, 0.36);
+}
+
+.text_error {
+    color: red;
+    font-family: "Lato", sans-serif;
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+.login {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    font-family: "Montserrat", sans-serif;
+}
+
+.login > span {
+    color: #000;
+}
+
+.login > a {
+    text-decoration: underline;
+    color: #000;
+}

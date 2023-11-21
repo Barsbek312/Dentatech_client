@@ -1,0 +1,175 @@
+/* month */
+
+button{
+    box-shadow: none !important;
+}
+
+.fc .fc-toolbar {
+    justify-content: start;
+    gap: 20px;
+}
+
+.fc-customLabel-button{
+    background: none !important;
+    border: none !important;
+    cursor: default !important;
+    color: inherit !important;
+    outline: none !important;
+    color: #222;
+    font-family: "Montserrat", sans-serif;
+    font-size: 32px !important;
+    padding-left: 0 !important;
+}
+
+.fc-customLabel-button:hover,
+.fc-customLabel-button:active,
+.fc-customLabel-button:focus{
+    background: none !important;
+    border: none !important;
+    cursor: default !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.fc-prev-button, .fc-next-button {
+    background-color: #F4F4F5 !important; 
+    border: none !important;          
+    outline: none !important; 
+    border-color: transparent !important;
+}
+
+.fc-prev-button{
+    border-radius: 8px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.fc-next-button{
+    border-radius: 8px !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.fc-icon-chevron-left::before {
+    color: #222;
+}
+
+.fc-icon-chevron-right::before {
+    color: #222;
+}
+
+.fc-toolbar-title {
+    color: #222 !important;
+    font-family: "Montserrat", sans-serif !important;
+    font-weight: 400;
+    min-width: 350px;
+    max-width: 350px;
+    text-align: center;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fc-timeGridWeek-button, .fc-dayGridMonth-button, .fc-timeGridDay-button{
+    background-color: transparent !important;
+    color: #222 !important;
+    font-family: "Inter", sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    border: none !important;
+    outline: none !important;
+}
+
+.fc-button-active {
+    border-radius: 8px !important;
+    background-color: #3788D8 !important;
+    box-shadow: none !important;
+    color: #fff !important;
+}
+
+.fc-list-button.fc-button.fc-button-primary {
+    border-radius: 8px !important;
+}
+
+.fc-today-button.fc-button.fc-button-primary, .fc-list-button.fc-button.fc-button-primary {
+    background-color: #3788D8 !important;
+    border: none !important;
+}
+
+.fc .fc-button-primary:active {
+    /* #3788D8 !important */
+}
+
+.fc-col-header-cell.fc-day .fc-scrollgrid-sync-inner {
+    display: flex !important;
+    margin-bottom: 25px !important;
+}
+
+
+.fc-col-header-cell.fc-day .fc-col-header-cell-cushion{
+    color: #222 !important;
+    font-family: "Inter", sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 400 !important;
+    text-transform: uppercase !important;
+}
+
+.fc-daygrid-day-number {
+    color: #71717A;
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.fc-daygrid-day-top {
+    justify-content: flex-end !important;
+}  
+
+.fc-daygrid-event-dot {
+    display: none;
+}
+
+
+.fc-timeGridWeek-view.fc-view.fc-timegrid .fc-col-header-cell.fc-day .fc-scrollgrid-sync-inner > .fc-col-header-cell-cushion{
+    max-width: 50px !important;
+    text-align: start !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    font-family: "Inter", sans-serif !important;
+    line-height: 25px;
+}
+
+.fc-timegrid-slot.fc-timegrid-slot-label.fc-timegrid-slot-minor, .fc-timegrid-slot.fc-timegrid-slot-lane.fc-timegrid-slot-minor {
+    border: none
+}
+
+.fc-timegrid-slot-label {
+    border: none !important;
+}
+
+.fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion {
+    font-family: "Inter", sans-serif;
+    color: #71717A;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.fc-event {
+    cursor: pointer;
+}
+
+.fc-timeGridDay-view .fc-timegrid-col.fc-day-today {
+    background: none;
+}
+
+/* MUI Select */
+
+.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-sizeSmall.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    border: 1px solid #E0E0E0;
+}

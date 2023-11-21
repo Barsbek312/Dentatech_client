@@ -1,0 +1,32 @@
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loader__wrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+.loader__images {
+    position: relative;
+}
+
+.loader__gear {
+    animation: spin 2s linear infinite;
+    position: absolute;
+    top: 3%;
+    left: 18%;
+    transform: translate(-50%, -50%);
+}
