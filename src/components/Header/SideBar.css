@@ -3,6 +3,7 @@
     position: relative;
     width: 21px;
     height: 17px;
+    z-index: 999 !important;
 }
 
 /* Color/shape of burger icon bars */
@@ -37,13 +38,18 @@
     position: fixed;
     height: 100%;
     left: 0;
-    top: 70px;
+    top: 0;
+    -webkit-box-shadow: 9px 0px 5px -4px rgba(0, 0, 0, 0.66);
+    -moz-box-shadow: 9px 0px 5px -4px rgba(0, 0, 0, 0.66);
+    box-shadow: 9px 0px 5px -4px rgba(0, 0, 0, 0.66);
 }
 
 /* General sidebar styles */
 .bm-menu {
-    background: #3B82F6;
+    background: #fff;
     font-size: 1.15em;
+    font-family: "Exo 2", sans-serif;
+    font-optical-sizing: auto;
 }
 
 /* Morph shape necessary with bubble or elastic */
@@ -64,7 +70,6 @@
 
 /* Styling of overlay */
 .bm-overlay {
-    background: transparent !important;
     left: 0;
     top: 0;
 
@@ -75,18 +80,21 @@
 }
 
 .menu-item {
-    color: #fff;
-    font-family: "Montserrat", sans-serif;
     font-size: 18px;
     font-weight: 400;
     position: relative;
-    color: #fff;
+    color: #333333;
     padding-left: 15px;
-    margin-bottom: 33px;
+    margin-bottom: 40px;
     margin-left: 13px;
+    word-wrap: break-word;
 }
 
-.menu-item::before{
+.menu-item.active {
+    color: #272A68;
+}
+
+.menu-item::before {
     content: '';
     position: absolute;
     left: -9px;
@@ -95,7 +103,7 @@
     height: 23px;
 }
 
-.first-item{
+.first-item {
     background-color: #fff;
     color: #222222;
     padding: 10px;
@@ -104,4 +112,9 @@
     font-weight: 400;
     font-size: 13px;
     margin-bottom: 25px;
+}
+
+.Header_schedule__auth__8amS3.active::before,
+.Header_schedule__login__9u3mm.active::before {
+    background: url('./../../assets/images/navbar__images/auth_active.svg') no-repeat;
 }

@@ -1,0 +1,92 @@
+.main__wrapper {
+    padding-bottom: 50px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.header>h2 {
+    color: #222;
+    font-family: "Montserrat", sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+}
+
+.patient__info_wrapper {
+    background-color: #272A68;
+    padding: 35px;
+    border-radius: 20px;
+    font-family: 'Exo 2', sans-serif;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.patient__info_wrapper h3,
+.patient__info_wrapper strong {
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.patient__info_wrapper span {
+    font-size: 25px;
+}
+
+
+.main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.main__wrapper > div > header {
+    border-bottom: 2px solid #E0E0E0;
+
+    &>ul {
+        display: flex;
+
+        &>li {
+            position: relative;
+            padding: 17px 30px;
+            color: #222;
+            font-family: "Montserrat", sans-serif;
+            font-size: 24px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: -2px;
+
+            &::before {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background-color: #272A68;
+                transform: scaleX(0);
+                transform-origin: left center;
+                transition: transform 0.2s ease-in-out;
+            }
+
+            &:hover {
+                color: #272A68;
+            }
+
+            &.active {
+                color: #272A68;
+
+                &::before {
+                    transform: scaleX(1);
+                }
+            }
+        }
+    }
+}

@@ -13,18 +13,27 @@
 
 .modal_content {
     background-color: #fff;
-    padding: 15px;
+    padding: 20px 25px;
     width: 90%;
-    max-width: 400px;  /* максимальная ширина */
-    border-radius: 8px;
+    max-width: 400px;
+    max-height: 90%;
+    overflow-y: scroll;
+    /* максимальная ширина */
+    border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    font-family: 'Exo 2', sans-serif;
 }
 
-.modal_content > div > div {
-    margin-bottom: 5px;
+.modal_content::-webkit-scrollbar {
+    display: none;
+}
+
+.modal_content>div>div {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal_content h2 {
@@ -35,22 +44,18 @@
 }
 
 .modal_content label {
-    margin-bottom: 4px;
-    display: block;
+    color: #333333;
+    font-weight: 600;
+    margin-bottom: 5px;
 }
 
-.modal_content input, .modal_content textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
+.modal_content input,
+.modal_content textarea {
     border-radius: 4px;
-    font-size: 14px;
-    transition: border-color 0.3s;
-}
-
-.modal_content input:focus, .modal_content textarea:focus {
-    border-color: #007BFF;
-    outline: none;
+    background-color: #fff;
+    padding: 10px;
+    border: 0.5px solid #333333;
+    width: 100%;
 }
 
 .modal_content textarea {
@@ -58,18 +63,25 @@
     min-height: 80px;
 }
 
-.modal_content button {
-    padding: 8px 12px;
+.create__patient_btn, .cancel__patient_btn {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 5px;
     border: none;
-    background-color: #007BFF;
+    outline: none;
     color: #fff;
-    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    margin-bottom: 10px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
 }
 
-.modal_content button:hover {
-    background-color: #0056b3;
+.create__patient_btn {
+    background-color: #272A68;
+}
+
+.cancel__patient_btn {
+    background-color: #858585;
 }
 
 .phone__input {
@@ -78,4 +90,15 @@
 
 .phone__input .form-control {
     width: 100% !important;
+}
+
+.modal_content em {
+    color: #757575;
+    font-size: 13px;
+    font-style: normal;
+}
+
+.birthday__wrapper input {
+    padding: 7px 10px !important;
+    border: none !important;
 }

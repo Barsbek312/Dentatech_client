@@ -1,0 +1,106 @@
+.tooth__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    & img {
+        cursor: pointer;
+    }
+}
+
+.tooth__wrapper>span {
+    color: #333333;
+    font-size: 15px;
+    font-family: "Exo 2", sans-serif;
+    font-weight: 500;
+}
+
+.tooth__premolar_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 57px;
+}
+
+/* Премолярный зуб */
+
+.tooth__premolar_top {
+    display: flex;
+
+    &>img:nth-child(1) {
+        margin-right: -2px;
+        margin-bottom: -3.5px;
+    }
+
+    &>img:nth-child(3) {
+        margin-bottom: -2px;
+        margin-left: -2px;
+    }
+}
+
+.tooth__premolar_middle {
+    display: flex;
+
+    &>img {
+        margin-top: -1.5px;
+    }
+}
+
+.tooth__premolar_bottom {
+    display: flex;
+
+    &>img {
+        margin-top: -2px;
+        margin-right: -0.5px;
+    }
+}
+
+.toothSideBar__premolar_wrapper {
+    &>div {
+        width: 100%;
+    }
+
+    & img {
+        width: 100%;
+        height: 100%;
+    }
+
+}
+
+.toothSideBar__premolar_wrapper>.tooth__premolar_top {
+    &>img:nth-child(1) {
+        margin-top: 9px;
+        margin-right: -5px;
+        height: 87%;
+    }
+
+
+    &>img:nth-child(2) {
+        margin-right: -3px;
+        height: 70px;
+    }
+
+
+    &>img:nth-child(3) {
+        margin-top: 7px;
+        height: 90%;
+    }
+}
+
+.toothSideBar__premolar_wrapper>.tooth__premolar_middle {
+    margin-top: -4px;
+
+    &>img {
+        margin-left: 6px;
+    }
+}
+
+.toothSideBar__premolar_wrapper>.tooth__premolar_bottom {
+    width: 90%;
+
+    &>img {
+        margin-top: -7px;
+        margin-left: 5px;
+    }
+}

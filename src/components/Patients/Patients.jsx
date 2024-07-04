@@ -1,202 +1,182 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import p from "./Patients.module.css";
-// import searchIcon from './../../assets/images/personal__images/search.svg';
-import { useForm } from "react-hook-form";
-import copy from './../../assets/images/personal__images/copy.svg';
-import trash from "./../../assets/images/personal__images/delete.svg";
+import patient_card from "./../../assets/images/common__images/user-card.svg";
+import add_patient_img from "./../../assets/images/common__images/add.svg";
 import { useDispatch, useSelector } from "react-redux";
-import Notification from "../Common/Notification/Notification";
-import { deleteEvent } from "../../redux/user";
+import { getPatient, getStaffPatientList } from "../../redux/patient";
+import { useNavigate } from "react-router-dom";
+import CreatePatient from "../CreatePatient/CreatePatient";
+import { MenuItem, Select } from "@mui/material";
+import { getPersonal } from "../../redux/personal";
+import "./Patients.css";
+import Nothing from "./../Common/Nothing/Nothing";
 
 const Patients = () => {
+  const [inputValue, setInputValue] = useState("");
+  const [isShow, setIsShow] = useState(false);
+  const [isActiveIndex, setIsActiveIndex] = useState(-1);
+  const { user, isAuth } = useSelector((state) => state.user);
+  const { patient, staffPatientList } = useSelector((state) => state.patient);
+  const { personal } = useSelector((state) => state.personal);
 
-    const [inputValue, setInputValue] = useState("");
-    const [personalList, setPersonalList] = useState([])
-    const [counter, setCounter] = useState(0);
-    const [isShow, setIsShow] = useState(false);
-    const [isActiveIndex, setIsActiveIndex] = useState(0)
-    const [isClickedOnRequest, setIsClickedOnRequest] = useState({
-        check: false,
-    }); 
-    const {user} = useSelector(state => state.user);
-    const wrapperOfModalWindow = useRef(null);
-    const modalWindow = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
+  const handleClickOnPatient = async (patientId) => {
+    navigate(`/patient-card/${patientId}`);
+  };
 
-    useEffect(() => {
-        if(user && user.events && counter === 0) {
+  const calculateAge = (birthDate) => {
+    const birth = new Date(birthDate);
+    const today = new Date();
 
-            setCounter(prevCounter => prevCounter+=1)
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDifference = today.getMonth() - birth.getMonth();
 
-            const events = user.events;
-            let personal = []
-
-            for(let i in events) {
-                personal.push({
-                    "id": events[i].id,
-                    'name': events[i].pacient,
-                    "age": events[i].agePacient,
-                    "status": (events[i].status !== "waiting" && events[i].status !== "cancelled") ? 3 : events[i].status === "waiting" ? 1 : 2
-                })
-            }
-
-            setPersonalList(personal)
-        }
-    }, [user])
-    // const [listOfPersonalBlocks, setListOfPersonalBlocks] = useState(null);
-
-    const { register, handleSubmit, formState: { errors } } = useForm();
-
-    const onSubmitAddPersonal = (data, event) => {
-        event.preventDefault();
-        console.log(data);
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
     }
 
-    const handleClickContainer = () => {
-        setIsShow(false);
+    return age;
+  };
+
+  useEffect(() => {
+    if (user && isAuth) {
+      dispatch(getPatient(user.clinicId));
+      dispatch(getPersonal(user.clinicId));
+      dispatch(getStaffPatientList(user.id));
     }
+  }, [user, isAuth]);
 
-    const handleClickModal = (e) => {
-        e.stopPropagation();
+  const handleChangeStaff = async (e) => {
+    const currentValue = e.target.value;
+    setIsActiveIndex(e.target.value);
+    if (user && user.id) {
+      if (parseInt(currentValue) === -1) {
+        dispatch(getPatient(user.clinicId));
+      } else {
+        dispatch(getStaffPatientList(currentValue));
+      }
     }
+  };
 
-    const copyPatient = async (namePatient) => {
-        try {
-            await navigator.clipboard.writeText(namePatient);
-            setIsClickedOnRequest({
-                check: true,
-                isError: false,
-            });
-        } catch(err) {
-            console.error("Ошибка при копировании ", err)
-            setIsClickedOnRequest({
-                check: true,
-                isError: true,
-            });
-        }
-    }
-
-    useEffect(() => {
-        if(isClickedOnRequest) {
-            setTimeout(() => {
-                setIsClickedOnRequest(false);
-            }, 2000)
-        }
-    }, [isClickedOnRequest])
-
-    const onDeletePatient = async (eventId) => {
-        await dispatch(deleteEvent)   
-    }
-
-    const renderPesonal = (listOfPersonal) => {
-        const filtredItems = listOfPersonal.filter((item) =>
-            (item["status"] === isActiveIndex || isActiveIndex === 0) && (item['name'].toLowerCase().includes(inputValue.toLowerCase()) || item['age'].includes(inputValue))
-        )
-
-        return (filtredItems.map(item => {
-            return (
-                <li className={p.personal__item}>
-                    <div>
-                        <div className={p.item__image_wrapper}><img src="" alt="" /></div>
-                        <div className={p.item__text_wrapper}>
-                            <h3>{item['name']}</h3>
-                        </div>
-                        <div className={p.item__job_title}>
-                            <span>
-                                {item['age']}
-                            </span>
-                        </div>
-                    </div>
-                    <div>
-                        <button title="Скопировать имя пацента"><img src={copy} alt="copy" onClick={() => {copyPatient(item['name'])}}/></button>
-                        <button title="Удалить пациента" onClick={() => {onDeletePatient(item.id)}}><img src={trash} alt="delete" /></button>
-                    </div>
-                </li>
-            )
-        }))
-    }
-
-    return (
-        <main>
-            {<Notification isError={isClickedOnRequest?.isError} Text="Текст успешно скопирован" isShow={isClickedOnRequest?.check}/>}
-            <div className="container">
-                <div className={p.add__personal_wrapper} style={{ display: isShow ? "flex" : "none" }} ref={wrapperOfModalWindow} onClick={handleClickContainer}>
-                    <div className={p.add__personal} ref={modalWindow} onClick={handleClickModal}>
-                        <form onSubmit={handleSubmit(onSubmitAddPersonal)}>
-
-                            <label htmlFor="input__name">Имя</label>
-                            <div className={p.name__icon}>
-                                <input {...register("name", {
-                                    required: "Имя является обязательным полем"
-                                })}
-                                    type="text"
-                                    placeholder={errors['name'] ? errors['name'].message : "Имя"}
-                                    style={{ borderColor: errors["name"] ? "red" : "rgba(196, 196, 196, 0.50)" }}
-                                    id="input__name" />
-                            </div>
-
-                            <label htmlFor="input__surname">Фамилия</label>
-                            <div className={p.surname__icon}>
-                                <input {...register("surname", {
-                                    required: "Фамилия является обязательным полем"
-                                })}
-                                    type="text"
-                                    placeholder={errors['surname'] ? errors['surname'].message : "Фамилия"}
-                                    style={{ borderColor: errors["surname"] ? "red" : "rgba(196, 196, 196, 0.50)" }}
-                                    id="input__surname" />
-                            </div>
-
-                            <label htmlFor="input__email">Почта</label>
-                            <div className={p.email__icon}>
-                                <input {...register("email", {
-                                    required: "Почта является обязательным полем",
-                                    pattern: {
-                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                        message: "Please enter a valid email address",
-                                    },
-                                })}
-                                    type="text"
-                                    placeholder={errors['email'] ? errors['email'].message : "Почта"}
-                                    style={{ borderColor: errors["email"] ? "red" : "rgba(196, 196, 196, 0.50)" }}
-                                    id="input__surname" />
-                            </div>
-
-                            <button type="submit">Пригласить</button>
-
-                        </form>
-                    </div>
-                </div>
-                <div className={p.header}>
-                    <h2>Пациенты</h2>
-                    <div><input type="text" placeholder="Поиск" onChange={(e) => { setInputValue(e.target.value) }} value={inputValue} /></div>
-                </div>
-                <div className={p.main}>
-                    <header>
-                        <ul>
-                            {["Все", "В ожидании", "Отмененные"].map((item, index) => {
-                                return (
-                                    <li
-                                        onClick={() => setIsActiveIndex(index)}
-                                        key={index}
-                                        className={`${isActiveIndex === index ? p.active : ""}`}>
-                                        {item}
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </header>
-                    <ul className={p.list__of_personal}>
-                        <ul className={p.list__of_title}>
-                            <li>Фамилия Имя/Номер телефона</li>
-                            <li>Возраст</li>
-                        </ul>
-                        {renderPesonal(personalList)}
-                    </ul>
-                </div>
-            </div>
-        </main>
+  const listOfPatients = (
+    isActiveIndex === -1 && patient ? patient : staffPatientList || []
+  )
+    .filter(
+      (item) =>
+        item?.["name"].toLowerCase().includes(inputValue.toLowerCase()) ||
+        item?.["surname"].toLowerCase().includes(inputValue.toLowerCase())
     )
-}
+    ?.map((item) => (
+      <li className={p.patient__list_item}>
+        <div className={p.patient__info_wrapper}>
+          <h2 className="ellipsis_line_1">
+            {(item?.name && item?.surname && `${item.name} ${item.surname}`) ||
+              "Unknown"}
+          </h2>
+          <h3 className="ellipsis_line_1">{item?.phone || "Unknown"}</h3>
+          <strong className="ellipsis_line_1">
+            {(item?.birthDate && calculateAge(item.birthDate)) || "Unknown"}
+          </strong>
+        </div>
+        <div>
+          <div
+            className={p.patient__card_wrapper}
+            onClick={() => handleClickOnPatient(item.id)}
+          >
+            <img src={patient_card} alt="patient-card-logo" />
+          </div>
+        </div>
+      </li>
+    ));
+
+  return (
+    <main className={p.main__wrapper}>
+      <div className="container">
+        {isShow && <CreatePatient onClose={() => setIsShow(false)} />}
+        <div className={p.header}>
+          <h2>Пациенты</h2>
+        </div>
+        <div className={p.category__list_wrapper + " " + p.adaptive__category_list}>
+          {user && user.id && (
+            <Select defaultValue={-1} onChange={handleChangeStaff}>
+              <MenuItem value={-1}>Все</MenuItem>
+              <MenuItem value={(user && user.id) || null}>Вы</MenuItem>
+              {personal &&
+                personal.map((item) => {
+                  if (item.id !== user.id) {
+                    return (
+                      <MenuItem value={item.id} key={item.id}>
+                        {(item?.name &&
+                          item?.surname &&
+                          `${item.name} ${item.surname}`) ||
+                          "Unknown"}
+                      </MenuItem>
+                    );
+                  }
+                })}
+            </Select>
+          )}
+        </div>
+        <div className={p.main}>
+          <div className={p.main_header}>
+            <div className={p.begin}>
+              <div className={p.add__patient_wrapper}>
+                <div
+                  className={p.add__logo_wrapper}
+                  onClick={() => setIsShow(true)}
+                >
+                  <img src={add_patient_img} alt="add-staff-logo" />
+                </div>
+                <span onClick={() => setIsShow(true)}>Добавить пациента</span>
+              </div>
+            </div>
+            <div className={p.category__list_wrapper}>
+              {user && user.id && (
+                <Select defaultValue={-1} onChange={handleChangeStaff}>
+                  <MenuItem value={-1}>Все</MenuItem>
+                  <MenuItem value={(user && user.id) || null}>Вы</MenuItem>
+                  {personal &&
+                    personal.map((item) => {
+                      if (item.id !== user.id) {
+                        return (
+                          <MenuItem value={item.id} key={item.id}>
+                            {(item?.name &&
+                              item?.surname &&
+                              `${item.name} ${item.surname}`) ||
+                              "Unknown"}
+                          </MenuItem>
+                        );
+                      }
+                    })}
+                </Select>
+              )}
+            </div>
+            <div className={p.search_wrapper}>
+              <div className={p.search}>
+                <input
+                  type="text"
+                  onChange={(e) => setInputValue(e.target.value)}
+                  value={inputValue}
+                />
+              </div>
+            </div>
+          </div>
+          <div className={p.main_body}>
+            {listOfPatients && listOfPatients.length > 0 ? (
+              <ul className={p.main__body_list}>{listOfPatients}</ul>
+            ) : (
+              <Nothing text={"У вас пока нет пациентов"} />
+            )}
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
 
 export default Patients;

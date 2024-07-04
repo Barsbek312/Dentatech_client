@@ -5,60 +5,76 @@ export const getUser = createAsyncThunk("user/getUser", async (_, thunkAPI) => {
     try {
         const res = await userAPI.getMe();
 
-        if(res.status === 200) {
+        if (res.status === 200) {
             return res;
         } else {
             const error = await res.text();
-            console.log(error);
-            thunkAPI.rejectWithValue(error);
+            return thunkAPI.rejectWithValue(error);
         }
-    } catch(err) {
-        console.log(err);
+    } catch (err) {
         return thunkAPI.rejectWithValue(err);
     }
 });
 
-export const getPositions = createAsyncThunk("user/getPosition", async(_, thunkAPI) => {
+export const getPositions = createAsyncThunk("user/getPosition", async (_, thunkAPI) => {
     try {
         const res = await userAPI.getPositions();
 
-        if(res.status === 200) {
+        if (res.status === 200) {
             return res;
         } else {
             const error = await res.text();
             return thunkAPI.rejectWithValue(error);
         }
-    } catch(err) {
+    } catch (err) {
         return thunkAPI.rejectWithValue(err);
     }
 })
 
-export const verifyEmail = createAsyncThunk("user/verify", async(data, thunkAPI) => {
+export const getCity = createAsyncThunk("user/getCity", async (_, thunkAPI) => {
+    try {
+        const res = await userAPI.getCities();
+
+        if (res.status === 200) {
+            return res;
+        } else {
+            const error = await res.text();
+            return thunkAPI.rejectWithValue(error)
+        }
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err)
+    }
+})
+
+export const verifyEmail = createAsyncThunk("user/verify", async (data, thunkAPI) => {
     const body = JSON.stringify(data);
 
     try {
         const res = await userAPI.verifyEmail(body);
-        if(res.status === 201) {
+        if (res.status === 201) {
             return res;
         } else {
             const error = await res.text();
             return thunkAPI.rejectWithValue(error);
         }
-    } catch(err) {
+    } catch (err) {
         return thunkAPI.rejectWithValue(err);
     }
 })
 
 export const createUser = createAsyncThunk("user/register", async (data, thunkAPI) => {
+    const { isRegister, ...restData } = data;
+    const body = JSON.stringify(restData);
 
-    const body = JSON.stringify(data);
 
     try {
         const res = await userAPI.createUser(body);
 
-        if(res.status === 201) {
-            const token = res.data.access_token; 
-            document.cookie = `token=${token}; max-age=${2*24*60*60}; path=/`;
+        if (res.status === 201) {
+            if (isRegister) {
+                const token = res.data.access_token;
+                document.cookie = `token=${token}; max-age=${2 * 24 * 60 * 60}; path=/`;
+            }
 
             return res;
         } else {
@@ -77,11 +93,11 @@ export const login = createAsyncThunk("user/login", async (data, thunkAPI) => {
     try {
         const res = await userAPI.login(body);
 
-        if(res.status === 200) {
-            const token = res.data.access_token; 
-            document.cookie = `token=${token}; max-age=${2*24*60*60}; path=/`;
+        if (res.status === 200) {
+            const access_token = res.data.access_token;
+            document.cookie = `token=${access_token}; max-age=${2 * 24 * 60 * 60}; path=/`;
 
-            const {dispatch} = thunkAPI;
+            const { dispatch } = thunkAPI;
 
             const res2 = await dispatch(getUser());
 
@@ -90,33 +106,27 @@ export const login = createAsyncThunk("user/login", async (data, thunkAPI) => {
             const error = await res.text();
             return thunkAPI.rejectWithValue(error);
         }
-    } catch(err) {
+    } catch (err) {
         return thunkAPI.rejectWithValue(err);
     }
 });
 
+export const changePassword = createAsyncThunk("user/changePassowrd", async ({ id, data }, thunkAPI) => {
+    const body = JSON.stringify(data)
 
-export const createEvent = createAsyncThunk("events/addEvent", async (data, thunkAPI) => {
+    try {
+        const res = await userAPI.changePassword(id, body);
 
-});
-
-export const getEvents = createAsyncThunk("events/getEvents", async (_, thunkAPI) => {
-
+        if (res.status === 201) {
+            return res;
+        } else {
+            const error = await res.text();
+            return thunkAPI.rejectWithValue(error);
+        }
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err);
+    }
 })
-
-export const deleteEvent = createAsyncThunk("events/deleteEvent", async (eventId, thunkAPI) => {
-
-});
-
-
-
-export const updateEvent = createAsyncThunk("events/updateEvent", async (eventData, thunkAPI) => {
-});
-
-export const getPersonal = createAsyncThunk("personal/getPersonalAll", async(_, thunkAPI) => {
-})
-
-
 
 let initialState = {
     user: null,
@@ -126,6 +136,7 @@ let initialState = {
     isAuth: false,
     status: null,
     positions: null,
+    city: null
 }
 
 
@@ -180,7 +191,7 @@ const userSlice = createSlice({
                 state.loadingUser = false;
                 state.user = action?.payload?.data;
                 state.isAuth = true;
-            }) 
+            })
             .addCase(getUser.rejected, state => {
                 state.loadingUser = false;
             })
@@ -194,59 +205,25 @@ const userSlice = createSlice({
             .addCase(getPositions.rejected, state => {
                 state.loadingUser = false;
             })
-            .addCase(createEvent.pending, state => {
+            .addCase(getCity.pending, state => {
                 state.loadingUser = true;
             })
-            .addCase(createEvent.fulfilled, state => {
+            .addCase(getCity.fulfilled, (state, action) => {
+                state.loadingUser = false;
+                state.city = action?.payload?.data;
+            })
+            .addCase(getCity.rejected, state => {
                 state.loadingUser = false;
             })
-            .addCase(createEvent.rejected, state => {
-                state.loadingUser = false;
-            })
-            .addCase(getEvents.pending, state => {
+            .addCase(changePassword.pending, state => {
                 state.loadingUser = true;
             })
-            .addCase(getEvents.fulfilled, (state, action) => {
-                state.loadingUser = false;
-                console.log(action)
-                state.user.events = action.payload.events;
-            })
-            .addCase(getEvents.rejected, state => {
+            .addCase(changePassword.fulfilled, (state, action) => {
                 state.loadingUser = false;
             })
-            .addCase(deleteEvent.pending, state => {
-                state.loadingUser = true;
-            })
-            .addCase(deleteEvent.fulfilled, (state, action) => {
-                state.loadingUser = false;
-                state.user.events = state.user.events.filter(event => event.id !== action.payload);
-            })
-            .addCase(deleteEvent.rejected, state => {
+            .addCase(changePassword.rejected, state => {
                 state.loadingUser = false;
             })
-            .addCase(updateEvent.pending, state => {
-                state.loadingUser = true;
-            })
-            .addCase(updateEvent.fulfilled, (state, action) => {
-                state.loadingUser = false;
-                const updatedEventIndex = state.user.events.findIndex(event => event.id === action.payload.id);
-                if (updatedEventIndex !== -1) {
-                    state.user.events[updatedEventIndex] = action.payload;
-                }
-            })
-            .addCase(updateEvent.rejected, state => {
-                state.loadingUser = false;
-            })
-            // .addCase(getPersonal.pending, state => {
-            //     state.loadingUser = true;
-            // })
-            // .addCase(getPersonal.fulfilled, (state, action) => {
-            //     state.loadingUser = false;
-            //     state.user.personal = action.payload || null;
-            // })
-            // .addCase(getPersonal.rejected, state => {
-            //     state.loadingUser = false;
-            // })
     }
 })
 

@@ -1,0 +1,90 @@
+.tooth__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    & img {
+        cursor: pointer;
+    }
+}
+
+.tooth__wrapper>span {
+    color: #333333;
+    font-size: 15px;
+    font-family: "Exo 2", sans-serif;
+    font-weight: 500;
+}
+
+.tooth__incisor_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 57px;
+}
+
+/* Зуб-резец */
+
+.tooth__incisor_top {
+    position: relative;
+    display: flex;
+
+    &>img:nth-child(1) {
+        position: absolute;
+        left: 0;
+        z-index: 3;
+    }
+
+    &>img:nth-child(3) {
+        position: absolute;
+        right: 0;
+        bottom: 5px;
+        z-index: 3;
+    }
+}
+
+.tooth__incisor_bottom {
+    display: flex;
+
+    &>img {
+        margin-top: -2px;
+        margin-right: -1px;
+    }
+}
+
+.toothSideBar__incisor_wrapper {
+    width: 70px;
+
+    &>div {
+        width: 100%;
+    }
+
+    & img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.toothSideBar__incisor_wrapper>.tooth__incisor_top {
+    &>img:nth-child(1) {
+        top: -1px;
+        width: 30px;
+        height: 60px;
+    }
+
+
+    &>img:nth-child(3) {
+        width: 30px;
+        top: 26px;
+        height: 30px;
+    }
+}
+
+.toothSideBar__incisor_wrapper>.tooth__incisor_bottom {
+    width: 80%;
+    margin-right: -2px;
+
+    &>img {
+        margin-top: -6px;
+    }
+}

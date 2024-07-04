@@ -1,0 +1,15 @@
+.text_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex: 1 1 0;
+    & > strong {
+        font-family: 'Exo 2', sans-serif;
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 50px;
+        text-align: center;
+    }
+}

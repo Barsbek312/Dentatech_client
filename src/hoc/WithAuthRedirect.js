@@ -15,4 +15,6 @@ export const WithAuthRedirect = (Component) => {
 
     return RedirectComponent;
 
+    //WithAuthRedirect.js:11 You should call navigate() in a React.useEffect(), not when your component is first rendered.
+
 } 

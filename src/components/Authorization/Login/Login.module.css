@@ -31,39 +31,19 @@
     position: relative;
 }
 
-.form>div::before {
-    content: '';
-    position: absolute;
-    left: 5px;
-    top: 33px;
-    z-index: 1;
-    height: 20px;
-    width: 21px;
-}
-
-
-.form>div.email__wrapper::before {
-    background: url("./../../../assets/images/login__images/email.svg") no-repeat;
-}
-
-.form>div.password__wrapper::before {
-    background: url("./../../../assets/images/login__images/password.svg") no-repeat;
-}
-
 .form>div>label {
-    font-family: 'Lato', sans-serif;
-    font-weight: 400;
+    font-weight: 600;
     color: #222;
     font-size: 14px;
     margin-bottom: 8px;
+    font-family: 'Exo 2', sans-serif;
 }
 
 .form>div>input {
     padding: 10px;
-    border-radius: 4px;
-    border: 1px solid rgba(196, 196, 196, 0.50);
+    border-radius: 5px;
+    border: 0.5px solid #333333 !important;
     position: relative;
-    padding-left: 30px;
 }
 
 .error {
@@ -74,13 +54,15 @@
 
 .button {
     border-radius: 4px;
-    background: #3B82F6;
+    background: #272A68;
     border: none;
     outline: none;
     color: #fff;
-    padding: 16px 0;
+    padding: 12px 0;
     cursor: pointer;
     transition: box-shadow 0.3s ease-in-out;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
 }
 
 .button:hover {
@@ -93,15 +75,12 @@
 .auth {
     width: 100%;
     display: flex;
-    justify-content: space-around;
-    font-family: "Montserrat", sans-serif;
+    justify-content: flex-end;
+    font-family: "Exo 2", sans-serif;
 }
 
-.auth > span {
-    color: #000;
-}
-
-.auth > a {
+.auth>a {
     text-decoration: underline;
-    color: #000;
+    color: #333333;
+    font-size: 14px;
 }

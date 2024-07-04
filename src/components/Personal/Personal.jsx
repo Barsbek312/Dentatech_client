@@ -1,215 +1,511 @@
 import React, { useEffect, useRef, useState } from "react";
 import p from "./Personal.module.css";
 // import searchIcon from './../../assets/images/personal__images/search.svg';
-import { useForm } from "react-hook-form";
-import copy from './../../assets/images/personal__images/copy.svg';
-import trash from "./../../assets/images/personal__images/delete.svg";
+import { Controller, useForm } from "react-hook-form";
+import copy from "./../../assets/images/personal__images/copy.svg";
 import { useDispatch, useSelector } from "react-redux";
 import PhoneInput from "react-phone-input-2";
-import { createUser, getPersonal } from "../../redux/user";
+import { createUser, getPositions } from "../../redux/user";
 import Notification from "../Common/Notification/Notification";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { getBranchesByClinicId } from "../../redux/branch";
+import eye_vis from "./../../assets/images/login__images/eye-off-line.svg";
+import add_staff_img from "./../../assets/images/common__images/add.svg";
+import personal_card_img from "./../../assets/images/common__images/user-card.svg";
+import dayjs from "dayjs";
+import { getPersonal } from "../../redux/personal";
+import "./PersonalForm.css";
+import {
+  removeNotification,
+  setErrorNotification,
+  setNotificationText,
+  showNotification,
+} from "../../redux/notification";
+import { useNavigate } from "react-router-dom";
 
 const Personal = () => {
+  const [inputValue, setInputValue] = useState("");
+  const [arrPositions, setArrPositions] = useState([]);
+  const { user, positions } = useSelector((state) => state.user);
+  const { branches } = useSelector((state) => state.branch);
+  const { personal } = useSelector((state) => state.personal);
+  const [personalList, setPersonalList] = useState([]);
+  const [counter, setCounter] = useState(0);
+  const [isVisibilePassword, setIsVisibilePassword] = useState(false);
+  // const [listOfPersonalBlocks, setListOfPersonalBlocks] = useState(null);
 
-    const [inputValue, setInputValue] = useState("");
-    const {user} = useSelector(state => state.user);
-    const [personalList, setPersonalList] = useState([])
-    const [counter, setCounter] = useState(0);
-    // const [listOfPersonalBlocks, setListOfPersonalBlocks] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const dispatch = useDispatch();
+  const handleClickOnPasswordVisibility = () => {
+    setIsVisibilePassword(!isVisibilePassword);
+  };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await dispatch(getPersonal());
-        }
+  useEffect(() => {
+    const getAllBranches = async (clinicId) => {
+      await dispatch(getPersonal(clinicId));
+      await dispatch(getPositions());
+      const res = await dispatch(getBranchesByClinicId(clinicId));
+    };
 
-        fetchData();
-    }, [])
-
-    useEffect(() => {
-        if(user && user.personal && counter === 0) {
-            setCounter(prevCounter => prevCounter+=1)
-            const events = user.personal;
-            let personal = []
-            for(let i in events) {
-                personal.push(events[i].name + " " + events[i].surname);
-            }
-
-            setPersonalList(personal)
-        }
-    }, [user])
-
-    const [isShow, setIsShow] = useState(false);
-    const [isClickcBehindModalWindow, setIsClickcBehindModalWindow] = useState(false);
-    const [isActiveIndex, setIsActiveIndex] = useState(0)
-    const wrapperOfModalWindow = useRef(null);
-    const modalWindow = useRef(null);
-
-    const [isCreatedUser, setIsCreatedUser] = useState(false);
-    const [isCreateWrong, setIsCreatedWrong] = useState(false);
-
-    const [phoneNumber, setPhoneNUmber] = useState("");
-
-    const { register, handleSubmit, formState: { errors } } = useForm();
-
-    const onSubmitAddPersonal = async (data, event) => {
-        event.preventDefault();
-        data['phoneNumber'] = phoneNumber; 
-        data['password'] = data['surname'] + "_" + data['name'] + (Math.floor(Math.random() * (9999 - 1000)) + 1000);
-        data['status'] = 'personal';
-
-        try {
-            const res = await dispatch(createUser(data));
-            if(res.type === "user/register/fulfilled") {
-                setIsCreatedWrong(false);
-                setTimeout(() => {
-                    setIsCreatedUser(true);
-                }, 300)
-                console.log(isCreatedUser)
-                setTimeout(() => {
-                    setIsCreatedUser(false);
-                }, 2000)
-            }
-        } catch(err) {
-            setIsCreatedWrong(true)
-        }
-        setIsShow(false);
+    if (user && user.branchId && user.clinicId) {
+      getAllBranches(user.clinicId);
     }
+  }, [user]);
 
-    const handleClickContainer = () => {
-        setIsShow(false);
+  useEffect(() => {
+    setArrPositions(positions);
+  }, [positions]);
+
+  useEffect(() => {
+    if (user && user.personal && counter === 0) {
+      setCounter((prevCounter) => (prevCounter += 1));
+      const events = user.personal;
+      let personal = [];
+      for (let i in events) {
+        personal.push(events[i].name + " " + events[i].surname);
+      }
+
+      setPersonalList(personal);
     }
+  }, [user]);
 
-    const handleClickModal = (e) => {
-        e.stopPropagation();
+  const [isShow, setIsShow] = useState(false);
+  const [isActiveIndex, setIsActiveIndex] = useState(0);
+  const wrapperOfModalWindow = useRef(null);
+  const modalWindow = useRef(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    reset,
+  } = useForm();
+
+  const onSubmitAddPersonal = async (data, event) => {
+    event.preventDefault();
+    data["isAdmin"] = data["isAdmin"] === "true";
+    data["staffStatusId"] = 1;
+    try {
+      const res = await dispatch(createUser({ ...data, isRegister: false }));
+      if (res.type === "user/register/fulfilled") {
+        dispatch(setErrorNotification(false));
+        dispatch(setNotificationText("Персонал успешно добавлен"));
+      }
+    } catch (err) {
+      dispatch(setErrorNotification(true));
+      dispatch(setNotificationText("Добавить персонал не удалось"));
     }
+    dispatch(showNotification());
+    removeNotification(dispatch);
+    setIsShow(false);
+  };
 
-    const renderPesonal = (listOfPersonal) => {
-        const filtredItems = listOfPersonal.filter((item) =>
-            item.toLowerCase().includes(inputValue.toLowerCase())
-        )
+  const handleClickContainer = () => {
+    setIsShow(false);
+  };
 
-        return (filtredItems.map(item => {
+  const handleClickModal = (e) => {
+    e.stopPropagation();
+  };
+
+  const handleChangeSearchInput = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const renderPesonal = (listOfPersonal) => {
+    if (user && user.id) {
+      return (
+        listOfPersonal &&
+        listOfPersonal
+          .filter(
+            (item) =>
+              item.id !== user.id &&
+              (item?.["name"]
+                .toLowerCase()
+                .includes(inputValue.toLowerCase()) ||
+                item?.["surname"]
+                  .toLowerCase()
+                  .includes(inputValue.toLowerCase()))
+          )
+          .map((item) => {
             return (
-                <li className={p.personal__item}>
-                    <div>
-                        <div className={p.item__image_wrapper}><img src="" alt="" /></div>
-                        <div className={p.item__text_wrapper}>
-                            <h3>{item}</h3>
-                        </div>
-                        <div className={p.item__job_title}>
-                            <span>
-                                Ст. Стоматолог
-                            </span>
-                        </div>
-                        {/* <div className={p.item__job_title}>
-                            <span>
-                                Приглашен
-                            </span>
-                        </div> */}
-                    </div>
-                    <div>
-                        <button><img src={copy} alt="copy" /></button>
-                        <button><img src={trash} alt="delete" /></button>
-                    </div>
-                </li>
-            )
-        }))
+              <li className={p.staff__list_item}>
+                <div className={p.staff__info_wrapper}>
+                  <h2 className="ellipsis_line_1">
+                    {(item?.name &&
+                      item?.surname &&
+                      `${item.name} ${item.surname}`) ||
+                      "Unknown"}
+                  </h2>
+                  <span>
+                    {(item &&
+                      item["staffPosition"] &&
+                      item["staffPosition"]?.["staffPosition"]) ||
+                      "Unknown"}
+                  </span>
+                </div>
+                <div>
+                  <div
+                    className={p.personal__card_wrapper}
+                    onClick={() => navigate(`/profile/${item.id}`)}
+                  >
+                    <img src={personal_card_img} alt="patient-card-logo" />
+                  </div>
+                </div>
+              </li>
+            );
+          })
+      );
     }
+  };
 
-    return (
-        <main>
-            <div className="container">
-                <Notification isError={isCreateWrong} isShow={isCreatedUser} Text={isCreateWrong ? "Приглашение отправить не удалось" : "Приглашение отправлено"}/>
-                <div className={p.add__personal_wrapper} style={{ display: isShow ? "flex" : "none" }} ref={wrapperOfModalWindow} onClick={handleClickContainer}>
-                    <div className={p.add__personal} ref={modalWindow} onClick={handleClickModal}>
-                        <form onSubmit={handleSubmit(onSubmitAddPersonal)}>
-
-                            <label htmlFor="input__name">Имя</label>
-                            <div className={p.name__icon}>
-                                <input {...register("name", {
-                                    required: "Имя является обязательным полем"
-                                })}
-                                    type="text"
-                                    placeholder={errors['name'] ? errors['name'].message : "Имя"}
-                                    style={{ borderColor: errors["name"] ? "red" : "rgba(196, 196, 196, 0.50)" }}
-                                    id="input__name" />
-                            </div>
-
-                            <label htmlFor="input__surname">Фамилия</label>
-                            <div className={p.surname__icon}>
-                                <input {...register("surname", {
-                                    required: "Фамилия является обязательным полем"
-                                })}
-                                    type="text"
-                                    placeholder={errors['surname'] ? errors['surname'].message : "Фамилия"}
-                                    style={{ borderColor: errors["surname"] ? "red" : "rgba(196, 196, 196, 0.50)" }}
-                                    id="input__surname" />
-                            </div>
-
-                            <label htmlFor="input__email">Почта</label>
-                            <div className={p.email__icon}>
-                                <input {...register("email", {
-                                    required: "Почта является обязательным полем",
-                                    pattern: {
-                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                        message: "Please enter a valid email address",
-                                    },
-                                })}
-                                    type="text"
-                                    placeholder={errors['email'] ? errors['email'].message : "Почта"}
-                                    style={{ borderColor: errors["email"] ? "red" : "rgba(196, 196, 196, 0.50)" }}
-                                    id="input__email" />
-                            </div>
-
-                            <label htmlFor="input__phone">Номер телефона:</label>
-                            <div className={p.phone__icon}>
-                                <PhoneInput
-                                    id="field__phone"
-                                    country={'kg'}
-                                    value={phoneNumber}
-                                    onChange={(phone) => { setPhoneNUmber(phone) }}
-                                />
-                            </div>
-
-                            <button type="submit">Пригласить</button>
-
-                        </form>
-                    </div>
+  return (
+    <main>
+      <div className="container">
+        <div
+          className={p.add__personal_wrapper}
+          style={{ display: isShow ? "flex" : "none" }}
+          ref={wrapperOfModalWindow}
+          onClick={handleClickContainer}
+        >
+          <div
+            className={p.add__personal}
+            ref={modalWindow}
+            onClick={handleClickModal}
+          >
+            <form onSubmit={handleSubmit(onSubmitAddPersonal)}>
+              <div>
+                <div className={p.name__wrapper}>
+                  <label htmlFor="field__name">Имя</label>
+                  <input
+                    {...register("name", {
+                      required: "Имя является обязательным полем",
+                    })}
+                    type="text"
+                    id="field__name"
+                    placeholder={
+                      errors["name"] ? errors["name"].message : "Имя"
+                    }
+                    style={{
+                      borderColor: errors["name"] ? "red" : "#333333",
+                    }}
+                  />
                 </div>
-                <div className={p.header}>
-                    <h2>Персонал</h2>
-                    <div><input type="text" placeholder="Поиск" onChange={(e) => { setInputValue(e.target.value) }} value={inputValue} /></div>
-                    <button onClick={() => { setIsShow(true) }}>Добавить персонал</button>
+                <div className={p.surname__wrapper}>
+                  <label htmlFor="field__surename">Фамилия</label>
+                  <input
+                    {...register("surname", {
+                      required: "Фамилия является обязательным полем",
+                    })}
+                    type="text"
+                    id="field__surename"
+                    placeholder={
+                      errors["surname"] ? errors["surname"].message : "Фамилия"
+                    }
+                    style={{
+                      borderColor: errors["surname"] ? "red" : "#333333",
+                    }}
+                  />
                 </div>
-                <div className={p.main}>
-                    <header>
-                        <ul>
-                            {["Все", "Подтвержденные", "В ожидании", "Отмененные"].map((item, index) => {
-                                return (
-                                    <li
-                                        onClick={() => setIsActiveIndex(index)}
-                                        key={index}
-                                        className={`${isActiveIndex === index ? p.active : ""}`}>
-                                        {item}
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </header>
-                    <ul className={p.list__of_personal}>
-                        <ul className={p.list__of_title}>
-                            <li>Фамилия Имя/Номер телефона</li>
-                            <li>Должность</li>
-                            <li>Статус</li>
-                        </ul>
-                        {renderPesonal(personalList)}
-                    </ul>
+                <div className={p.phone__wrapper}>
+                  <label htmlFor="field__phone">Телефон</label>
+                  <Controller
+                    name="phone"
+                    control={control}
+                    defaultValue={""}
+                    rules={{ required: "Телефон является обязательным полем" }}
+                    render={({ field, fieldState: { error } }) => (
+                      <PhoneInput
+                        {...field}
+                        id="field__phone"
+                        country={"kg"}
+                        inputStyle={{
+                          border: error
+                            ? "1px solid red"
+                            : "0.5px solid #333333",
+                          borderRadius: "5px",
+                          paddingTop: "10px",
+                          paddingBottom: "10px",
+                          height: "auto !important",
+                        }}
+                      />
+                    )}
+                  />
                 </div>
+                <div className={p.isMale__wrapper}>
+                  <FormControl fullWidth size="small" error={errors["isMale"]}>
+                    <label htmlFor="">Пол</label>
+                    <Controller
+                      name="isMale"
+                      control={control}
+                      defaultValue={""}
+                      rules={{ required: "Пол является обязательным полем" }}
+                      render={({ field, fieldState: { error } }) => (
+                        <Select
+                          {...field}
+                          labelId={p.select_label_isMale}
+                          className={p.item__wrapper}
+                          displayEmpty
+                        >
+                          <MenuItem value="">
+                            <em className={p.placeholder}>Выберите пол</em>
+                          </MenuItem>
+                          <MenuItem value={true}>Мужской</MenuItem>
+                          <MenuItem value={false}>Женский</MenuItem>
+                        </Select>
+                      )}
+                    />
+                  </FormControl>
+                </div>
+                <div className={p.birthday__wrapper}>
+                  <label htmlFor="">Дата рождения</label>
+                  <Controller
+                    name="birthDate"
+                    control={control}
+                    defaultValue={null}
+                    rules={{
+                      required: "Дата рождения является обязательным полем",
+                    }}
+                    render={({ field, fieldState: { error } }) => (
+                      <LocalizationProvider
+                        dateAdapter={AdapterDayjs}
+                        adapterLocale="en-gb"
+                      >
+                        <DatePicker
+                          {...field}
+                          control={control}
+                          slotProps={{
+                            textField: {
+                              error: !!error,
+                              size: "small",
+                            },
+                          }}
+                        />
+                      </LocalizationProvider>
+                    )}
+                  />
+                </div>
+                <div className={p.branch__wrapper}>
+                  <FormControl
+                    fullWidth
+                    size="small"
+                    error={errors["branchId"]}
+                  >
+                    <label htmlFor={p.select_label_position}>Филиал</label>
+                    <Controller
+                      name="branchId"
+                      control={control}
+                      defaultValue={""}
+                      rules={{ required: "Филиал является обязательным полем" }}
+                      render={({ field, fieldState: { error } }) => (
+                        <Select
+                          {...field}
+                          labelId={p.select_label_position}
+                          displayEmpty
+                        >
+                          <MenuItem value="">
+                            <em className={p.placeholder}>Выберите пол</em>
+                          </MenuItem>
+                          {branches &&
+                            branches.map((branch) => (
+                              <MenuItem value={branch.id} key={branch.id}>
+                                {branch.branch}
+                              </MenuItem>
+                            ))}
+                        </Select>
+                      )}
+                    />
+                  </FormControl>
+                </div>
+                <div className={p.isAdmin__wrapper}>
+                  <FormControl fullWidth size="small" error={errors["isAdmin"]}>
+                    <label htmlFor={p.select_label_isAdmin}>Статус</label>
+                    <Controller
+                      name="isAdmin"
+                      control={control}
+                      defaultValue={""}
+                      rules={{ required: "Статус является обязательным полем" }}
+                      render={({ field, fieldState: { error } }) => (
+                        <Select
+                          {...field}
+                          labelId={p.select_label_isAdmin}
+                          displayEmpty
+                        >
+                          <MenuItem value="">
+                            <em className={p.placeholder}>Выберите пол</em>
+                          </MenuItem>
+                          <MenuItem value={"true"}>Админ</MenuItem>
+                          <MenuItem value={"false"}>Не админ</MenuItem>
+                        </Select>
+                      )}
+                    />
+                  </FormControl>
+                </div>
+                <div className={p.position__wrapper}>
+                  <FormControl
+                    fullWidth
+                    size="small"
+                    error={errors["staffPositionId"]}
+                  >
+                    <label htmlFor={p.select_label_position}>Должность</label>
+                    <Controller
+                      name="staffPositionId"
+                      control={control}
+                      defaultValue={""}
+                      rules={{
+                        required: "Позиция является обязательным полем",
+                      }}
+                      render={({ field, fieldState: { error } }) => (
+                        <>
+                          <Select
+                            {...field}
+                            labelId={p.select_label_position}
+                            displayEmpty
+                          >
+                            <MenuItem value="">
+                              <em className={p.placeholder}>Выберите пол</em>
+                            </MenuItem>
+                            {arrPositions &&
+                              arrPositions.map((position) => (
+                                <MenuItem key={position.id} value={position.id}>
+                                  {position.staffPosition}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </>
+                      )}
+                    />
+                  </FormControl>
+                </div>
+                <div className={p.email__wrapper}>
+                  <label htmlFor="">Почта</label>
+                  <input
+                    {...register("email", {
+                      required: "Почта является обязательным полем",
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "Please enter a valid email address",
+                      },
+                    })}
+                    placeholder={
+                      errors["email"] ? errors["email"].message : "Почта"
+                    }
+                    style={{
+                      borderColor: errors["email"] ? "red" : "#333333",
+                    }}
+                    type="text"
+                  />
+                </div>
+                <div className={p.password__wrapper}>
+                  <label htmlFor="field__password">Пароль</label>
+                  <input
+                    {...register("password", {
+                      required: "Пароль является обязательным полем",
+                    })}
+                    type={isVisibilePassword ? "text" : "password"}
+                    id="field__password"
+                    placeholder={
+                      errors["password"]
+                        ? errors["password"].message
+                        : "Придумайте пароль работнику"
+                    }
+                    autoComplete="on"
+                    style={{
+                      borderColor: errors["password"] ? "red" : "#333333",
+                    }}
+                  />
+                  <div
+                    className={p.password__visibility_wrapper}
+                    onClick={handleClickOnPasswordVisibility}
+                  >
+                    <img src={eye_vis} alt="password-visibility" />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className={
+                    p.add__personal_button + " " + p.add__personal__button_first
+                  }
+                >
+                  Добавить
+                </button>
+                <button
+                  type="button"
+                  className={p.add__personal_button}
+                  onClick={() => {
+                    setIsShow(false);
+                    reset();
+                  }}
+                >
+                  Отменить
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div className={p.header}>
+          <h2>Персонал</h2>
+        </div>
+        <div className={p.me_wrapper}>
+          <div>
+            <span>Вы</span>
+          </div>
+          <div>
+            <h2 className="ellipsis_line_1">
+              {(user &&
+                user.surname &&
+                user.name &&
+                `${user.name} ${user.surname}`) ||
+                "Unknown"}
+            </h2>
+          </div>
+        </div>
+        <div className={p.main}>
+          <div className={p.main_header}>
+            <div className={p.left_wrapper}>
+              <div className={p.left}>
+                <span>Все</span>
+                <div className={p.add__staff_wrapper}>
+                  {user && user.isAdmin && (
+                    <>
+                      <div
+                        className={p.add__logo_wrapper}
+                        onClick={() => setIsShow(true)}
+                      >
+                        <img src={add_staff_img} alt="add-staff-logo" />
+                      </div>
+                      <span onClick={() => setIsShow(true)}>
+                        Добавить в персонал
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className={p.pos_wrapper}>
+                <span>Должность</span>
+              </div>
             </div>
-        </main>
-    )
-}
+            <div className={p.search_wrapper}>
+              <div className={p.search}>
+                <input
+                  type="text"
+                  onChange={handleChangeSearchInput}
+                  value={inputValue}
+                />
+              </div>
+            </div>
+          </div>
+          <div className={p.main_body}>
+            <ul className={p.main__body_list}>{renderPesonal(personal)}</ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+};
 
 export default Personal;

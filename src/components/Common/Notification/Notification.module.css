@@ -2,7 +2,7 @@
     position: fixed;
     right: 15px;
     bottom: -150px;
-    z-index: 100;
+    z-index: 1000;
     display: flex;
     align-items: center;
     background-color: #B6EACD;
@@ -23,11 +23,11 @@
     background-color: #B6EACD;
 }
 
-.notification__wrapper > img {
+.notification__wrapper>img {
     height: 100%;
 }
 
-.notification__wrapper > span {
+.notification__wrapper>span {
     font-family: "Inter", sans-serif;
     font-weight: 300;
     letter-spacing: 0.8px;

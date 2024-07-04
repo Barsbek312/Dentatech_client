@@ -1,6 +1,6 @@
 /* month */
 
-button{
+button {
     box-shadow: none !important;
 }
 
@@ -9,7 +9,7 @@ button{
     gap: 20px;
 }
 
-.fc-customLabel-button{
+.fc-customLabel-button {
     background: none !important;
     border: none !important;
     cursor: default !important;
@@ -23,7 +23,7 @@ button{
 
 .fc-customLabel-button:hover,
 .fc-customLabel-button:active,
-.fc-customLabel-button:focus{
+.fc-customLabel-button:focus {
     background: none !important;
     border: none !important;
     cursor: default !important;
@@ -32,20 +32,21 @@ button{
     outline: none !important;
 }
 
-.fc-prev-button, .fc-next-button {
-    background-color: #F4F4F5 !important; 
-    border: none !important;          
-    outline: none !important; 
+.fc-prev-button,
+.fc-next-button {
+    background-color: #F4F4F5 !important;
+    border: none !important;
+    outline: none !important;
     border-color: transparent !important;
 }
 
-.fc-prev-button{
+.fc-prev-button {
     border-radius: 8px !important;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
 
-.fc-next-button{
+.fc-next-button {
     border-radius: 8px !important;
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
@@ -71,7 +72,9 @@ button{
     text-overflow: ellipsis;
 }
 
-.fc-timeGridWeek-button, .fc-dayGridMonth-button, .fc-timeGridDay-button{
+.fc-timeGridWeek-button,
+.fc-dayGridMonth-button,
+.fc-timeGridDay-button {
     background-color: transparent !important;
     color: #222 !important;
     font-family: "Inter", sans-serif !important;
@@ -92,7 +95,8 @@ button{
     border-radius: 8px !important;
 }
 
-.fc-today-button.fc-button.fc-button-primary, .fc-list-button.fc-button.fc-button-primary {
+.fc-today-button.fc-button.fc-button-primary,
+.fc-list-button.fc-button.fc-button-primary {
     background-color: #3788D8 !important;
     border: none !important;
 }
@@ -107,7 +111,7 @@ button{
 }
 
 
-.fc-col-header-cell.fc-day .fc-col-header-cell-cushion{
+.fc-col-header-cell.fc-day .fc-col-header-cell-cushion {
     color: #222 !important;
     font-family: "Inter", sans-serif !important;
     font-size: 22px !important;
@@ -124,14 +128,14 @@ button{
 
 .fc-daygrid-day-top {
     justify-content: flex-end !important;
-}  
+}
 
 .fc-daygrid-event-dot {
     display: none;
 }
 
 
-.fc-timeGridWeek-view.fc-view.fc-timegrid .fc-col-header-cell.fc-day .fc-scrollgrid-sync-inner > .fc-col-header-cell-cushion{
+.fc-timeGridWeek-view.fc-view.fc-timegrid .fc-col-header-cell.fc-day .fc-scrollgrid-sync-inner>.fc-col-header-cell-cushion {
     max-width: 50px !important;
     text-align: start !important;
     font-size: 15px !important;
@@ -140,7 +144,8 @@ button{
     line-height: 25px;
 }
 
-.fc-timegrid-slot.fc-timegrid-slot-label.fc-timegrid-slot-minor, .fc-timegrid-slot.fc-timegrid-slot-lane.fc-timegrid-slot-minor {
+.fc-timegrid-slot.fc-timegrid-slot-label.fc-timegrid-slot-minor,
+.fc-timegrid-slot.fc-timegrid-slot-lane.fc-timegrid-slot-minor {
     border: none
 }
 
@@ -165,7 +170,7 @@ button{
 
 /* MUI Select */
 
-.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-sizeSmall.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+.Schedule_patients__wrapper__wilUz .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-sizeSmall.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }

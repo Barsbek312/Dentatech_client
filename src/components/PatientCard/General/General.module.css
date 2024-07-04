@@ -1,0 +1,135 @@
+.general__wrapper {
+    padding-top: 20px;
+}
+
+.main__info {
+    padding-bottom: 40px;
+    border-bottom: 2px solid #E0E0E0;
+}
+
+.change__wrapper {
+    display: flex;
+    width: 100%;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.main__info_inputs {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+
+    &>div {
+        width: 30%;
+    }
+}
+
+.birth_of_date__wrapper {
+    display: flex;
+    margin-top: 30px;
+    gap: 20px;
+
+    &>div {
+        width: 30%;
+    }
+}
+
+.main__info_radio {
+    font-weight: 500 !important;
+    font-size: 20px;
+    margin-top: 30px;
+}
+
+.main__info_radio label:first-child {
+    font-size: 20px;
+    color: #787982;
+}
+
+.reception__wrapper {
+    width: 100%;
+}
+
+/* .reception__wrapper.common__wrapper>div {
+    width: auto !important
+} */
+
+.reception__wrapper_first {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100% !important;
+
+    &>div {
+        width: 30%;
+    }
+}
+
+.reception__wrapper_second {
+    width: 100% !important;
+    height: 100%;
+
+    &>div {
+        width: 100%;
+    }
+}
+
+
+.common__wrapper {
+    margin-top: 30px;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+
+    &>div {
+        width: 40%
+    }
+}
+
+.doctor__wrapper {
+    margin-top: 30px;
+
+    &>div {
+        width: 30%;
+    }
+}
+
+.radio__item span:last-child {
+    font-size: 16px;
+    color: #333;
+    font-family: "Inter", sans-serif !important;
+}
+
+.contacts {
+    margin-top: 30px;
+}
+
+.contacts>h3 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 25px;
+    color: #222;
+}
+
+.contacts>div {
+    margin-top: 20px;
+}
+
+.habitation__wrapper {
+    display: flex;
+    margin-top: 30px;
+    gap: 20px;
+
+    &>div {
+        width: 30% !important;
+    }
+}
+
+.reception__wrapper_third {
+    width: 100% !important;
+    display: flex;
+    gap: 20px;
+
+    &>div {
+        width: 30%;
+    }
+}

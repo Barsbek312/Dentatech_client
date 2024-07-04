@@ -21,7 +21,6 @@ const Login = () => {
     const handleFormSubmit = async (data, event) => {
         event.preventDefault();
         const res = await dispatch(login(data));
-        console.log(res);
         if(res?.payload?.payload?.status === 200) {
             navigate('/');
         } else if(res?.payload?.response?.status === 403 && res?.payload?.response?.data?.message === "Credentials incorrect"){
@@ -57,6 +56,7 @@ const Login = () => {
                                 required: "Пароль является обязательным полем"
                             })}
                                 type="password" 
+                                autoComplete="on"
                                 id="field__password" 
                                 placeholder={errors['password'] ? errors['password'].message : "Пароль"}
                                 style={{ borderColor: errors["password"] ? "red" : "rgba(196, 196, 196, 0.50)" }}
@@ -71,10 +71,7 @@ const Login = () => {
                     </form>
 
                     <div className={l.auth}>
-                        <span>
-                            У вас нет аккаунта?
-                        </span>
-                        <NavLink to="/auth">Регистрация</NavLink>
+                        <NavLink to="/auth">У вас еще нет аккаунта?</NavLink>
                     </div>
                 </div>
             </div>

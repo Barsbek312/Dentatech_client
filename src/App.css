@@ -4,17 +4,21 @@
     box-sizing: border-box;
 }
 
-html, body, #root{
-    width: 100%;
+html,
+body,
+#root {
+    width: 100% !important;
     height: 100%;
 }
 
-.app-wrapper{
+.app-wrapper {
     position: absolute;
     left: 0;
     top: 0;
     height: 100%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
@@ -23,7 +27,7 @@ html, body, #root{
     padding: 0 20px;
 }
 
-main{
+main {
     padding-top: 100px;
     padding-bottom: 30px;
     flex: 1 0 auto;
@@ -33,10 +37,32 @@ ul {
     list-style: none;
 }
 
-a{
+a {
     text-decoration: none;
 }
 
-::-webkit-scrollbar {
+html,
+body::-webkit-scrollbar {
     width: 0;
+}
+
+.ellipsis_line_1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.ellipsis_line_2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.ellipsis_line_3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
