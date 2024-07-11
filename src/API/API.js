@@ -1,12 +1,9 @@
 import axios from "axios";
-import { editDiagnosis } from "../redux/disease";
 
 let instance = axios.create({
     withCredentials: true,
     baseURL: "http://localhost:3333",
     headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
         'Content-Type': 'application/json',
     }
 })

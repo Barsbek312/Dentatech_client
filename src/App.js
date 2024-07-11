@@ -1,25 +1,23 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Header from "./components/Header/Header";
-import Auth from "./components/Authorization/Signup/Auth";
-import Schedule from "./components/Schedule/Schedule";
-import Personal from "./components/Personal/Personal";
-import Login from "./components/Authorization/Login/Login";
-import Profile from "./components/Profile/Profile";
 import { useEffect } from "react";
-import { checkAuth, getEvents, getUser } from "./redux/user";
+import { getUser } from "./redux/user";
 import { useDispatch, useSelector } from "react-redux";
 // import Loader from "./components/Common/Loader/Loader";
 import Loader from "./components/Common/Loader/Loader";
-import Patients from "./components/Patients/Patients";
-import Verify from "./components/Authorization/Verify/Verify";
-import VerifyNotification from "./components/Authorization/VerifyNotification/VerifyNotification";
-import Branches from "./components/Branches/Branches";
-import ServiceDisease from "./components/ServiceDisease/ServiceDisease";
-import PatientCard from "./components/PatientCard/PatientCard";
 import Notification from "./components/Common/Notification/Notification";
-import CompletedProcedure from "./components/PatientCard/CompletedProcedure/CompletedProcedure";
-import PatientBill from "./components/PatientCard/PatientBill/PatientBill";
+import LoginContainer from "./components/Authorization/LoginContainer/LoginContainer";
+import AuthContainer from "./components/Authorization/SignupContainer/AuthContainer";
+import VerifyContainer from "./components/Authorization/VerifyContainer/VerifyContainer";
+import VerifyNotificationContainer from "./components/Authorization/VerifyNotificationContainer/VerifyNotificationContainer";
+import BranchListContainer from "./components/BranchListContainer/BranchListContainer";
+import HeaderContainer from "./components/HeaderContainer/HeaderContainer";
+import PersonalContainer from "./components/PersonalContainer/PersonalContainer";
+import ProfileContainer from "./components/ProfileContainer/ProfileContainer";
+import ScheduleContainer from "./components/ScheduleContainer/ScheduleContainer";
+import PatientListContainer from "./components/PatientListContainer/PatientListContainer";
+import PatientCardContainer from "./components/PatientCardContainer/PatientCardContainer";
+import CompletedProcedureContainer from "./components/PatientCardContainer/PatientCard/CompletedProcedureContainer/CompletedProcedureContainer";
 
 function App() {
 
@@ -49,20 +47,19 @@ function App() {
       <div className="app-wrapper">
         <Loader loading={loadingUser || loadingPatient || loadingSchedule || loadingBranch || loadingTooth || loadingDisease || loadingProcedure || loadingPersonal || loadingBill || loadingTemplate} />
         <Notification isShow={isShowNotification} Text={notificationText} isError={isErrorNotification} />
-        <Header />
+        <HeaderContainer />
         <Routes>
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Schedule />} />
-          <Route path="/personal" element={<Personal />} />
-          <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/patients" element={<Patients />} />
-          <Route path="/verify-email" element={<Verify />} />
-          <Route path="/verify-email-notification" element={<VerifyNotification />} />
-          <Route path="/branches" element={<Branches />} />
-          <Route path="/services-diseases" element={<ServiceDisease />} />
-          <Route path="/patient-card/:id/:activeIndex?" element={<PatientCard />} />
-          <Route path="/patient-order/:id/:receptionId" element={<CompletedProcedure />} />
+          <Route path="/auth" element={<AuthContainer />} />
+          <Route path="/login" element={<LoginContainer />} />
+          <Route path="/" element={<ScheduleContainer />} />
+          <Route path="/personal" element={<PersonalContainer />} />
+          <Route path="/profile/:id" element={<ProfileContainer />} />
+          <Route path="/patient-list" element={<PatientListContainer />} />
+          <Route path="/verify-email" element={<VerifyContainer />} />
+          <Route path="/verify-email-notification" element={<VerifyNotificationContainer />} />
+          <Route path="/branch-list" element={<BranchListContainer />} />
+          <Route path="/patient-card/:id/:activeIndex?" element={<PatientCardContainer />} />
+          <Route path="/patient-order/:id/:receptionId" element={<CompletedProcedureContainer />} />
         </Routes>
       </div>
     </BrowserRouter>
